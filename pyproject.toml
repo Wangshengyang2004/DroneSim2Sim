@@ -1,0 +1,45 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dronesim2sim"
+version = "0.1.0"
+description = "A framework for drone simulation and control"
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+authors = [
+    { name = "Shengyang Wang", email = "shengyang.wang2004@gmail.com" }
+]
+dependencies = [
+    "numpy>=1.24.0,<2.0.0",
+    "torch>=2.0.0",
+    "jax>=0.4.13",
+    "jaxlib>=0.4.13",
+    "gymnasium>=1.0.0",
+    "pybullet>=3.2.0",
+    "matplotlib>=3.0.0",
+    "pandas>=1.5.0,<2.0.0",
+    "protobuf>=3.20.0,<4.0.0",
+    "stable-baselines3>=1.6.0",
+    "rl-games>=1.5.2",
+    "mujoco>=2.3.2",
+    "pyyaml>=6.0",
+    "pillow>=9.0.0",
+    "tqdm>=4.64.0",
+    "wandb>=0.13.0",
+    "seaborn>=0.11.0",
+    "pytest>=6.0.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/Wangshengyang2004/DroneSim2Sim"
+Repository = "https://github.com/Wangshengyang2004/DroneSim2Sim.git"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/dronesim2sim"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"] 

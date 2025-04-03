@@ -1,3 +1,8 @@
+# Python virtual environments
+venv/
+env/
+.env/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -172,3 +177,34 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Results and outputs
+results/
+logs/
+checkpoints/
+*.pth
+*.pt
+*.ckpt
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Simulation specific
+*.mujoco_config.xml
+
+# Temporary files
+*.log
+*.out
+*.tmp
+
+# Large data files
+data/
+datasets/
+trained_models/

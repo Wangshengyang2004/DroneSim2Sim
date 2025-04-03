@@ -1,0 +1,17 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Dev Rule
+By default we use pytorch to complete the core logic, if using jax, the file should end with _jax to distinguish.
+
+# Run in the terminal
+Since we use uv to develop the repo, please make sure the venv is activated already.
+
+# Core logic
+All core logic and things can be abstracted should be put in the core folder. For these simulators, keep minimal to build.
+
+# No numpy
+For compatibility, use all torch, or jax for _jax. No numpy in the loop.

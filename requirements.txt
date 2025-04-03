@@ -1,0 +1,37 @@
+# Core dependencies
+numpy>=1.19.0
+gymnasium>=0.28.0
+torch>=1.8.0
+tensorboard>=2.5.0
+
+# RL algorithms
+stable-baselines3>=1.6.0
+rl-games>=1.5.2
+
+# Simulation environments 
+# (Isaac Sim is installed separately through NVIDIA)
+pybullet>=3.2.1
+mujoco>=2.3.2
+
+# Utilities
+pyyaml>=6.0
+pillow>=9.0.0
+matplotlib>=3.3.0
+tqdm>=4.64.0
+wandb>=0.13.0  # Optional for experiment tracking
+
+# For Gazebo interface (optional)
+# These require ROS installation
+# rospy>=1.15.0
+# ros_numpy>=0.0.4
+# tf2_ros>=0.7.0
+
+# For isaac_sim environment (optional)
+# omni-isaac-sim  # Note: This needs to be installed separately through NVIDIA's channels
+
+# For analyzing results
+pandas>=1.1.0
+seaborn>=0.11.0
+
+# For testing
+pytest>=6.0.0 

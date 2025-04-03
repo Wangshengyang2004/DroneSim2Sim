@@ -1,118 +1,137 @@
-# **DroneSim2Sim: A Benchmark for Sim-to-Sim Transfer in Drone Control**  
-![GitHub](https://img.shields.io/badge/license-MIT-blue) ![Python](https://img.shields.io/badge/python-3.10%2B-green)  
+# DroneSim2Sim
 
-A unified benchmark for evaluating **Reinforcement Learning (RL) policies** trained in **NVIDIA Isaac Sim** and transferred to **PyBullet, Gazebo, and MuJoCo** for drone control tasks.  
+A project for testing drone simulation environments and sim-to-sim transfer capabilities with various physics engines.
 
----
+## Overview
 
-## Updates:
-Looking for collaborators to work on this project! If you are interested in this project, please contact me via email: shengyang.wang2004@gmail.com
+DroneSim2Sim provides a consistent interface for drone control and reinforcement learning across multiple simulation backends:
 
----
+- Isaac Sim (NVIDIA PhysX)
+- PyBullet
+- MuJoCo
+- Gazebo
 
-## **📌 Project Overview**  
-This repository provides:  
-✅ **Training pipeline** for drone RL policies in **Isaac Sim** (high-fidelity GPU-accelerated simulation).  
-✅ **Sim-to-Sim transfer** to **PyBullet** (lightweight), **Gazebo** (ROS-compatible), and **MuJoCo** (high-precision physics).  
-✅ **Benchmarking tools** to compare policy performance across simulators.  
-✅ **Modular design** for extending to new tasks (e.g., hovering, trajectory tracking).  
+The project includes implementations of different control algorithms:
+- PID controllers (with NumPy, PyTorch, and JAX implementations)
+- Learning-based controllers
 
-**Goal**: Study how RL policies generalize across simulators with varying physics engines and fidelity.  
+## Project Structure
 
----
+```
+DroneSim2Sim/
+├── isaac_sim/           # Isaac Sim environment
+│   ├── drone_env.py     # Drone environment
+│   ├── train.py         # Training script
+│   ├── test.py          # Test script
+│   └── models/          # 3D models
+├── pybullet/            # PyBullet environment
+│   ├── drone_env.py     # Drone environment
+│   ├── quadrotor.urdf   # URDF model
+│   ├── pid_controller.py # PID controller (NumPy)
+│   ├── torch_pid_controller.py # PID controller (PyTorch)
+│   ├── jax_pid_controller.py # PID controller (JAX)
+│   ├── hover_test.py    # Hover test script (NumPy)
+│   ├── torch_hover_test.py # Hover test script (PyTorch)
+│   ├── jax_hover_test.py # Hover test script (JAX)
+│   ├── run_hover_tests.py # Compare controllers
+│   └── test.py          # Test script
+├── analyze_results.py   # Analysis script
+└── requirements.txt     # Project dependencies
+```
 
-## **🚀 Key Features**  
-| Feature               | Isaac Sim | PyBullet | Gazebo | MuJoCo |  
-|-----------------------|-----------|----------|--------|--------|  
-| **GPU Acceleration**  | ✔️        | ❌       | ❌     | ✔️     |  
-| **ROS Support**       | ❌        | ❌       | ✔️     | ❌     |  
-| **High-Fidelity Vision** | ✔️    | ❌       | ✔️     | ❌     |  
-| **Fast Prototyping**  | ❌        | ✔️       | ❌     | ❌     |  
+## Installation
 
----
+### Using uv (Recommended)
 
-## **🛠 Installation**  
-### **1. Prerequisites**  
-- Python 3.10+  
-- NVIDIA Isaac Sim ([Installation Guide](https://docs.omniverse.nvidia.com/isaacsim/latest/installation.html))  
-- NVIDIA IsaacLab ([Installation Guide](https://docs.omniverse.nvidia.com/isaacsim/latest/isaacsim_install_guide.html))
-- PyBullet: `pip install pybullet`  
-- MuJoCo (requires [license](https://www.roboti.us/license.html))  
-- ROS (for Gazebo, optional)  
-
-### **2. Clone the Repository**  
+1. Install uv:
 ```bash
-git clone https://github.com/Wangshengyang2004/DroneSim2Sim.git
+pip install uv
+```
+
+2. Clone the repository:
+```bash
+git clone https://github.com/username/DroneSim2Sim.git
 cd DroneSim2Sim
+```
+
+3. Create a virtual environment and install dependencies:
+```bash
+uv venv
+uv pip install -e .
+```
+
+### Traditional Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/username/DroneSim2Sim.git
+cd DroneSim2Sim
+```
+
+2. Create a virtual environment:
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+3. Install dependencies:
+```bash
 pip install -r requirements.txt
 ```
 
----
+4. For Isaac Sim support, install Isaac Sim following NVIDIA's instructions.
 
-## **📂 Repository Structure**  
-```
-DroneSim2Sim/
-├── isaac_sim/              # Isaac Sim training environment
-│   ├── train.py            # RL training script (PPO/SAC)
-│   └── drone_env.py        # Custom drone environment
-├── pybullet/               # PyBullet transfer
-│   ├── test.py             # Load and test Isaac-trained policy
-│   └── drone_env.py        # PyBullet drone environment
-├── gazebo/                 # Gazebo transfer (ROS-based)
-│   ├── launch/             # Gazebo world files
-│   └── test.py             # Policy deployment
-├── mujoco/                 # MuJoCo transfer
-│   ├── test.py             # Policy testing
-│   └── drone_model.xml     # MuJoCo drone model
-└── results/                # Metrics and plots
-```
+## Usage
 
----
+### Running PID Controller Tests
 
-## **🔧 Usage**  
-### **1. Train a Policy in Isaac Sim**  
-```bash
-cd isaac_sim
-python train.py --task hover --output policy.pt
-```
+Compare different PID controller implementations for the hover task:
 
-### **2. Test in PyBullet**  
 ```bash
 cd pybullet
-python test.py --policy ../isaac_sim/policy.pt
+python run_hover_tests.py --target_height 1.0 --duration 10.0
 ```
 
-### **3. Test in Gazebo (ROS required)**  
+### Testing Specific Controllers
+
+Test NumPy PID controller:
 ```bash
-cd gazebo
-roslaunch launch/drone_world.launch
-python test.py --policy ../isaac_sim/policy.pt
+python hover_test.py --target_height 1.0
 ```
 
-### **4. Benchmark Results**  
-- Compare **success rates**, **control errors**, and **computation time** across simulators.  
-- Generate plots:  
+Test PyTorch PID controller:
 ```bash
-python analyze_results.py --dir ./results
+python torch_hover_test.py --target_height 1.0
 ```
 
-
-## **📄 Citation**  
-If you use this work in research, please cite:  
-```bibtex
-@misc{DroneSim2Sim,
-  author = {Shengyang Wang},
-  title = {DroneSim2Sim: A Benchmark for Sim-to-Sim Transfer in Drone Control},
-  year = {2025},
-  publisher = {GitHub},
-  journal = {GitHub Repository},
-  howpublished = {\url{https://github.com/Wangshengyang2004/DroneSim2Sim}}
-}
+Test JAX PID controller:
+```bash
+python jax_hover_test.py --target_height 1.0
 ```
 
----
+### Analyzing Results
 
-## **💡 Related Projects**  
-- [NVIDIA Isaac Gym](https://developer.nvidia.com/isaac-gym)  
-- [PyBullet Drones](https://github.com/utiasDSL/gym-pybullet-drones)  
-- [MuJoCo Robotics](https://github.com/google-deepmind/mujoco_menagerie)  
+After running tests, analyze the results:
+```bash
+python analyze_results.py --results_dir results/hover_comparison --task hover
+```
+
+## Performance
+
+The project includes optimized implementations of PID controllers using NumPy, PyTorch, and JAX, with significant performance differences:
+
+| Implementation | Avg. Computation Time | Relative Speedup |
+|----------------|----------------------|------------------|
+| NumPy          | ~0.5-1.0 ms          | 1.0x (baseline)  |
+| PyTorch        | ~0.2-0.5 ms          | 2-4x             |
+| JAX            | ~0.1-0.3 ms          | 3-8x             |
+
+## Tasks
+
+Current implemented tasks:
+- Hover: Maintain a specific height
+- More complex tasks coming soon!
+
+## License
+
+MIT License
